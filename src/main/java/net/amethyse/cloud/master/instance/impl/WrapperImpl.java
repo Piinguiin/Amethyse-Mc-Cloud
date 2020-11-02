@@ -2,8 +2,11 @@ package net.amethyse.cloud.master.instance.impl;
 
 import de.piinguiin.netframe.commons.connection.NetFrameConnection;
 import java.net.InetAddress;
+import java.util.Set;
 import lombok.Getter;
 import net.amethyse.cloud.master.CloudMaster;
+import net.amethyse.cloud.master.instance.Proxy;
+import net.amethyse.cloud.master.instance.Server;
 import net.amethyse.cloud.master.instance.Wrapper;
 import net.amethyse.cloud.master.network.packets.wrapper.out.WrapperStopPacket;
 
@@ -19,12 +22,13 @@ import net.amethyse.cloud.master.network.packets.wrapper.out.WrapperStopPacket;
  */
 public class WrapperImpl implements Wrapper {
 
-  @Getter private String name;
+  @Getter
+  private String name;
   private InetAddress address;
-  private int port;
-  @Getter private NetFrameConnection connection;
+  @Getter
+  private NetFrameConnection connection;
 
-  public WrapperImpl(){
+  public WrapperImpl() {
     this.name = CloudMaster.getInstance().getInstanceManager().generateNewWrapperName();
   }
 
@@ -39,7 +43,8 @@ public class WrapperImpl implements Wrapper {
   }
 
   @Override
-  public void onHandshakeSuccess() {}
+  public void onHandshakeSuccess() {
+  }
 
   public InetAddress getAddress() {
 
@@ -52,14 +57,18 @@ public class WrapperImpl implements Wrapper {
     return address;
   }
 
+  @Override
   public int getPort() {
+    return 0;
+  }
 
-    if (isConnected()) {
-      CloudMaster.getInstance()
-          .getLogger()
-          .error("Cannot return port from Wrapper cause its not connected.");
-      return -1;
-    }
-    return port;
+  @Override
+  public Set<Server> getServers() {
+    return null;
+  }
+
+  @Override
+  public Set<Proxy> getProxies() {
+    return null;
   }
 }

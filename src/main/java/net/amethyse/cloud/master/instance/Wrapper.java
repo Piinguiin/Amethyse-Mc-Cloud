@@ -1,5 +1,6 @@
 package net.amethyse.cloud.master.instance;
 
+import java.util.Set;
 import net.amethyse.cloud.master.network.Communicatable;
 
 /*******************************************************
@@ -14,5 +15,43 @@ import net.amethyse.cloud.master.network.Communicatable;
 public interface Wrapper extends Communicatable {
 
   String getName();
+
+  Set<Server> getServers();
+
+  Set<Proxy> getProxies();
+
+  default void addServer(Server server){
+    if(getServers().contains(server)){
+      return;
+    }
+    getServers().add(server);
+  }
+
+  default void removeServer(Server server){
+
+    if(!getServers().contains(server)){
+      return;
+    }
+
+    getServers().remove(server);
+  }
+
+  default void addProxy(Proxy proxy){
+
+    if(getProxies().contains(proxy)){
+      return;
+    }
+
+    getProxies().add(proxy);
+  }
+
+  default void removeProxy(Proxy proxy){
+
+    if(!getProxies().contains(proxy)){
+      return;
+    }
+
+    getProxies().remove(proxy);
+  }
 
 }

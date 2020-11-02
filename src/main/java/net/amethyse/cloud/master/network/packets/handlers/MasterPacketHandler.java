@@ -31,7 +31,7 @@ public class MasterPacketHandler implements PacketHandler {
         CloudMaster.getInstance().getInstanceManager().registerWrapper(wrapper);
         connection.getConnection().sendPackets(new WrapperConnectedPacket(true));
         CloudMaster.getInstance().getLogger().info(
-            wrapper.getName() + " connected! Registered Wrapper: " + CloudMaster.getInstance()
+            wrapper.getName() + " connected! Registered wrapper: " + CloudMaster.getInstance()
                 .getInstanceManager().getWrappers().size() + ".");
         break;
 
