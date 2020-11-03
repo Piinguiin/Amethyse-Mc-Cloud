@@ -34,7 +34,7 @@
     <dependency>
       <groupId>netframe</groupId>
       <artifactId>netframe</artifactId>
-      <version>1.0.11</version>
+      <version>1.0.12</version>
     </dependency>
 
     <!-- https://mvnrepository.com/artifact/org.projectlombok/lombok -->
