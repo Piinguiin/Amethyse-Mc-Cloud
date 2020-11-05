@@ -10,6 +10,7 @@ import net.amethyse.cloud.master.file.configs.ProxyGroupsFile;
 import net.amethyse.cloud.master.file.configs.ServerGroupsFile;
 import net.amethyse.cloud.master.instance.impl.ProxyImpl;
 import net.amethyse.cloud.master.instance.impl.ServerImpl;
+import net.amethyse.cloud.master.instance.impl.task.InstanceCheckTask;
 import net.amethyse.cloud.master.network.Communicatable;
 import net.amethyse.cloud.master.templates.ProxyGroupTemplate;
 import net.amethyse.cloud.master.templates.ServerGroupTemplate;
@@ -28,74 +29,49 @@ public class InstanceManager {
 
   @Getter
   private Map<String, Wrapper> wrappers;
+  @Getter
   private Map<String, Map<String, Server>> servers;
+  @Getter
   private Map<String, Map<String, Proxy>> proxies;
 
   public InstanceManager() {
     this.wrappers = new HashMap<>();
     this.servers = new HashMap<>();
     this.proxies = new HashMap<>();
-    startFromTemplateAmount();
+    loadTemplates();
+    startInstanceChecker();
   }
 
-  private void startFromTemplateAmount() {
+  private void startInstanceChecker() {
+    new InstanceCheckTask(this).start();
+  }
+
+  private void loadTemplates() {
+
     FileManager fileManager = CloudMaster.getInstance().getFileManager();
-    startServers(fileManager);
-    startProxies(fileManager);
-  }
 
-  private void startServers(FileManager fileManager) {
     ServerGroupsFile serverGroupsFile = fileManager.getServerGroupsFile();
-    if (!serverGroupsFile.getServerTemplates().isEmpty()) {
 
-      for (ServerGroupTemplate templates : serverGroupsFile.getServerTemplates()) {
-        int toStart = templates.getOnlineAmount();
-        this.servers.put(templates.getName(), new HashMap<>());
-        for (int i = 0; i < toStart; i++) {
-          Server server = new ServerImpl(templates);
+    for (ServerGroupTemplate templates : serverGroupsFile.getServerTemplates()) {
 
-          Wrapper wrapper;
-
-          try {
-            wrapper = getFreeWrapper();
-          } catch (NullPointerException e) {
-            CloudMaster.getInstance().getLogger().error("Cannot start server.");
-            CloudMaster.getInstance().getLogger().error(e.getMessage());
-            return;
-          }
-
-          server.start(wrapper);
-          this.servers.get(templates.getName()).put(server.getName(), server);
-        }
+      if(this.servers.containsKey(templates.getName())){
+        continue;
       }
-    }
-  }
 
-  private void startProxies(FileManager fileManager) {
+      this.servers.put(templates.getName(), new HashMap<>());
+    }
+
     ProxyGroupsFile proxyGroupsFile = fileManager.getProxyGroupsFile();
-    if (!proxyGroupsFile.getProxyTemplates().isEmpty()) {
 
-      for (ProxyGroupTemplate templates : proxyGroupsFile.getProxyTemplates()) {
-        int toStart = templates.getOnlineAmount();
-        this.proxies.put(templates.getName(), new HashMap<>());
-        for (int i = 0; i < toStart; i++) {
-          Proxy proxy = new ProxyImpl(templates);
+    for (ProxyGroupTemplate templates : proxyGroupsFile.getProxyTemplates()) {
 
-          Wrapper wrapper;
-
-          try {
-            wrapper = getFreeWrapper();
-          } catch (NullPointerException e) {
-            CloudMaster.getInstance().getLogger().error("Cannot start proxy.");
-            CloudMaster.getInstance().getLogger().error(e.getMessage());
-            return;
-          }
-
-          proxy.start(wrapper);
-          this.proxies.get(templates.getName()).put(proxy.getName(), proxy);
-        }
+      if(this.proxies.containsKey(templates.getName())){
+        continue;
       }
+
+      this.proxies.put(templates.getName(), new HashMap<>());
     }
+
   }
 
   public void registerWrapper(Wrapper wrapper) {
@@ -158,6 +134,28 @@ public class InstanceManager {
     this.proxies.get(proxy.getGroup()).put(proxy.getName(), proxy);
   }
 
+  public void unregisterProxy(Proxy proxy){
+
+    final Map<String, Proxy> proxies = this.proxies.get(proxy.getGroup());
+
+    if(!proxies.containsKey(proxy.getName())){
+      return;
+    }
+
+    this.proxies.get(proxy.getGroup()).remove(proxy.getName());
+  }
+
+  public void unregisterServer(Server server){
+
+    final Map<String, Server> servers = this.servers.get(server.getGroup());
+
+    if(!servers.containsKey(server.getName())){
+      return;
+    }
+
+    this.servers.get(server.getGroup()).remove(server.getName());
+  }
+
   public Wrapper getWrapper(String name) throws NullPointerException {
     if (!this.wrappers.containsKey(name)) {
       throw new NullPointerException("No wrapper found with name " + name);
@@ -209,7 +207,7 @@ public class InstanceManager {
 
     int start = 1;
 
-    while (this.wrappers.containsKey("WRAPPER-"+start)) {
+    while (this.wrappers.containsKey("WRAPPER-" + start)) {
       start++;
     }
     return "WRAPPER-" + start;
@@ -238,7 +236,7 @@ public class InstanceManager {
     return name;
   }
 
-  private Wrapper getFreeWrapper() throws NullPointerException {
+  public Wrapper getFreeWrapper() throws NullPointerException {
     if (this.wrappers.isEmpty()) {
       throw new NullPointerException("No wrapper found. Please start one first.");
     }
@@ -246,12 +244,12 @@ public class InstanceManager {
     return this.wrappers.get("WRAPPER-1");
   }
 
-  public void stopAllServers(){
+  public void stopAllServers() {
     stopWrapper();
   }
 
-  private void stopWrapper(){
-    if(this.wrappers.isEmpty()){
+  private void stopWrapper() {
+    if (this.wrappers.isEmpty()) {
       return;
     }
 

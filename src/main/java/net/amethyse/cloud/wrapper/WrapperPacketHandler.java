@@ -19,7 +19,11 @@ public class WrapperPacketHandler implements PacketHandler {
 
   @PacketHandlerMethod
   public void onSuccessPacket(NetFramePacketContext packetContext, WrapperConnectedPacket wrapperConnectedPacket){
-    System.out.println("Received success: "+wrapperConnectedPacket.isSuccess());
+    if(wrapperConnectedPacket.isSuccess()){
+      System.out.println("Connected to Master.");
+    }else{
+      System.exit(1);
+    }
   }
 
   @PacketHandlerMethod

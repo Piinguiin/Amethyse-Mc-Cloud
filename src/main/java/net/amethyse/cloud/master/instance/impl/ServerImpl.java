@@ -61,7 +61,9 @@ public class ServerImpl implements Server {
   }
 
   @Override
-  public void stop() {}
+  public void stop() {
+    CloudMaster.getInstance().getInstanceManager().unregisterServer(this);
+  }
 
   @Override
   public void onConnect(NetFrameConnection connection) {
@@ -70,7 +72,9 @@ public class ServerImpl implements Server {
   }
 
   @Override
-  public void onDisconnect() {}
+  public void onDisconnect() {
+    stop();
+  }
 
   @Override
   public void onHandshakeSuccess() {}

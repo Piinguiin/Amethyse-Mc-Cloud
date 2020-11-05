@@ -2,6 +2,7 @@ package net.amethyse.cloud.master.network.packets.server.out;
 
 import de.piinguiin.netframe.commons.buffer.NetFrameBuffer;
 import de.piinguiin.netframe.commons.protocol.packet.NetFramePacket;
+import lombok.Getter;
 
 /*******************************************************
  * Copyright (C) 2015-2019 Piinguiin neuraxhd@gmail.com
@@ -14,13 +15,22 @@ import de.piinguiin.netframe.commons.protocol.packet.NetFramePacket;
  *******************************************************/
 public class ServerStartPacket implements NetFramePacket {
 
+  @Getter
+  private String template;
+
+  public ServerStartPacket(){}
+
+  public ServerStartPacket(String template){
+    this.template = template;
+  }
+
   @Override
   public void write(NetFrameBuffer netFrameBuffer) {
-
+    netFrameBuffer.writeString(this.template);
   }
 
   @Override
   public void read(NetFrameBuffer netFrameBuffer) {
-
+    this.template = netFrameBuffer.readString();
   }
 }

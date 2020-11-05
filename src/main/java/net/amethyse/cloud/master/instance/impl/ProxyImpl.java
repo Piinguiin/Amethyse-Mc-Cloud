@@ -8,6 +8,8 @@ import net.amethyse.cloud.lib.misc.ProxyChooseStrategy;
 import net.amethyse.cloud.master.CloudMaster;
 import net.amethyse.cloud.master.instance.Proxy;
 import net.amethyse.cloud.master.instance.Wrapper;
+import net.amethyse.cloud.master.network.packets.proxy.out.ProxyStartPacket;
+import net.amethyse.cloud.master.network.packets.server.out.ServerStartPacket;
 import net.amethyse.cloud.master.templates.ProxyGroupTemplate;
 
 /**
@@ -49,22 +51,24 @@ public class ProxyImpl implements Proxy {
   // sends start packets
   @Override
   public void start(Wrapper wrapper) {
-    if (staticProxy) {
-      try {
+    try {
+      if (staticProxy) {
         this.wrapper = CloudMaster.getInstance().getInstanceManager().getWrapper(wrapperName);
-      } catch (NullPointerException e) {
-        CloudMaster.getInstance().getLogger().info(e.getMessage());
-        return;
+      } else {
+        this.wrapper = CloudMaster.getInstance().getInstanceManager().getWrapper(wrapperName);
       }
-    } else {
-      this.wrapper = CloudMaster.getInstance().getInstanceManager().getWrapper(wrapperName);
+    }catch (NullPointerException e){
+      CloudMaster.getInstance().getLogger().info(e.getMessage());
     }
-    //TODO SEND START PACKET
+
+    this.wrapper.getConnection().sendPackets(new ProxyStartPacket(group));
   }
 
   // executed when server stops
   @Override
-  public void stop() {}
+  public void stop() {
+    CloudMaster.getInstance().getInstanceManager().unregisterProxy(this);
+  }
 
   // executed when master get the handshake packet
   @Override
@@ -75,7 +79,9 @@ public class ProxyImpl implements Proxy {
 
   // executed when master get the disconnect packet
   @Override
-  public void onDisconnect() {}
+  public void onDisconnect() {
+    stop();
+  }
 
   // executed after handshake complete, after connect
   @Override
