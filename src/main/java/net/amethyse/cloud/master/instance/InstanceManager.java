@@ -78,11 +78,11 @@ public class InstanceManager {
 
     if (this.wrappers.containsKey(wrapper.getName())) {
       CloudMaster.getInstance()
-          .getLogger()
-          .warn("Wrapper with name " + wrapper.getName() + " already registered.");
+              .getLogger()
+              .warn("Wrapper with name " + wrapper.getName() + " already registered.");
       CloudMaster.getInstance()
-          .getLogger()
-          .warn("Prevent starting from Wrapper " + wrapper.getName() + ".");
+              .getLogger()
+              .warn("Prevent starting from Wrapper " + wrapper.getName() + ".");
       return;
     }
 
@@ -99,13 +99,13 @@ public class InstanceManager {
 
     if (servers.containsKey(server.getName())) {
       CloudMaster.getInstance()
-          .getLogger()
-          .warn(
-              "Server with name " + server.getName() + " already existing in group ",
-              server.getGroup() + ".");
+              .getLogger()
+              .warn(
+                      "Server with name " + server.getName() + " already existing in group ",
+                      server.getGroup() + ".");
       CloudMaster.getInstance()
-          .getLogger()
-          .warn("Prevent starting from Server " + server.getName() + ".");
+              .getLogger()
+              .warn("Prevent starting from Server " + server.getName() + ".");
       return;
     }
 
@@ -121,13 +121,13 @@ public class InstanceManager {
 
     if (proxies.containsKey(proxy.getName())) {
       CloudMaster.getInstance()
-          .getLogger()
-          .warn(
-              "Proxy with name " + proxy.getName() + " already existing in group ",
-              proxy.getGroup() + ".");
+              .getLogger()
+              .warn(
+                      "Proxy with name " + proxy.getName() + " already existing in group ",
+                      proxy.getGroup() + ".");
       CloudMaster.getInstance()
-          .getLogger()
-          .warn("Prevent starting from Proxy " + proxy.getName() + ".");
+              .getLogger()
+              .warn("Prevent starting from Proxy " + proxy.getName() + ".");
       return;
     }
 
@@ -167,7 +167,7 @@ public class InstanceManager {
     final Map<String, Server> servers = this.servers.get(group);
     if (!servers.containsKey(name)) {
       throw new NullPointerException(
-          "No server found with name " + name + " in group " + group + ".");
+              "No server found with name " + name + " in group " + group + ".");
     }
     return servers.get(name);
   }
@@ -187,7 +187,7 @@ public class InstanceManager {
     final Map<String, Proxy> proxies = this.proxies.get(group);
     if (!proxies.containsKey(name)) {
       throw new NullPointerException(
-          "No proxy found with name " + name + " in group " + group + ".");
+              "No proxy found with name " + name + " in group " + group + ".");
     }
     return proxies.get(name);
   }

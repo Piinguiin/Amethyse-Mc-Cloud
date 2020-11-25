@@ -115,11 +115,11 @@ public class FileManager {
       }
 
       this.serverGroupsFile =
-          new GsonFileReader(logger, getBaseDirectory(), "ServerGroups")
-              .read(ServerGroupsFile.class, ServerGroupsFile.getDefault());
+              new GsonFileReader(logger, getBaseDirectory(), "ServerGroups")
+                      .read(ServerGroupsFile.class, ServerGroupsFile.getDefault());
       this.proxyGroupsFile =
-          new GsonFileReader(logger, getBaseDirectory(), "ProxyGroups")
-              .read(ProxyGroupsFile.class, ProxyGroupsFile.getDefault());
+              new GsonFileReader(logger, getBaseDirectory(), "ProxyGroups")
+                      .read(ProxyGroupsFile.class, ProxyGroupsFile.getDefault());
 
     } catch (Exception e) {
       e.printStackTrace();
@@ -131,5 +131,15 @@ public class FileManager {
       return new File("master/");
     }
     return baseDirectory;
+  }
+
+  //TODO: Repair class definition
+  public ServerGroupsFile getServerGroupsFile() {
+    return serverGroupsFile;
+  }
+
+  //TODO: Repair class definition
+  public ProxyGroupsFile getProxyGroupsFile() {
+    return proxyGroupsFile;
   }
 }

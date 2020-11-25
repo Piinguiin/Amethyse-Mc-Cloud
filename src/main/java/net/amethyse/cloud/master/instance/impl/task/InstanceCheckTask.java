@@ -1,6 +1,9 @@
 package net.amethyse.cloud.master.instance.impl.task;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
 import java.util.concurrent.TimeUnit;
 import lombok.AllArgsConstructor;
 import net.amethyse.cloud.master.CloudMaster;
@@ -28,7 +31,19 @@ import net.amethyse.cloud.master.templates.ServerGroupTemplate;
 @AllArgsConstructor
 public class InstanceCheckTask extends Thread {
 
-  private final InstanceManager instanceManager;
+  private InstanceManager instanceManager;
+
+  //TODO: Repair class definition
+  private final HashMap<String, HashMap<String, Server>> servers;
+  //TODO: Repair class definition
+  private final HashMap<String, HashMap<String, Proxy>> proxies;
+
+  //TODO: Repair class definition
+  public InstanceCheckTask(InstanceManager instanceManager) {
+    instanceManager = instanceManager;
+    servers = new HashMap<>();
+    proxies = new HashMap<>();
+  }
 
   @Override
   public void run() {
@@ -58,6 +73,10 @@ public class InstanceCheckTask extends Thread {
   }
 
   private void startServers(FileManager fileManager) {
+    //TODO: Repair class definition
+    ServerGroupsFile serverGroupsFile = ServerGroupsFile.getDefault();
+    //TODO: Repair class definition
+    int toStart = 1;
 
     for (ServerGroupTemplate templates : serverGroupsFile.getServerTemplates()) {
       this.servers.put(templates.getName(), new HashMap<>());
@@ -82,6 +101,8 @@ public class InstanceCheckTask extends Thread {
   }
 
   private void startProxies(FileManager fileManager) {
+    //TODO: Repair class definition
+    ProxyGroupsFile proxyGroupsFile = ProxyGroupsFile.getDefault();
 
     for (ProxyGroupTemplate templates : proxyGroupsFile.getProxyTemplates()) {
       int toStart = templates.getOnlineAmount();

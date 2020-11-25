@@ -57,10 +57,10 @@ public class CloudMaster implements CloudModule {
 
   private void startServer() {
     NetFrameConfig netFrameConfig =
-        NetFrameConfig.newBuilder()
-            .setProtocol(protocolHandler.getMasterProtocol())
-            .setServerHost("localhost")
-            .setServerPort(8080).createNetFrameConfig();
+            NetFrameConfig.newBuilder()
+                    .setProtocol(protocolHandler.getMasterProtocol())
+                    .setServerHost("localhost")
+                    .setServerPort(8080).createNetFrameConfig();
     server = NetFrameServerFactory.createNetFrameServer(netFrameConfig);
     server.start();
   }
@@ -74,4 +74,14 @@ public class CloudMaster implements CloudModule {
   public ModuleType getModuleType() {
     return ModuleType.MASTER;
   }
+
+  public static void main(String[] args) {
+    CloudMaster cloudMaster = new CloudMaster();
+    try {
+      cloudMaster.load(null);
+    } catch(Exception exception) {
+      exception.printStackTrace();
+    }
+  }
+
 }

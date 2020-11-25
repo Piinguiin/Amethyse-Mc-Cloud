@@ -26,4 +26,13 @@ public class ProxyGroupTemplate {
   private boolean staticProxy;
   private String wrapperName;
 
+  //TODO: Repair class definition
+  public int getOnlineAmount() {
+    return onlineAmount;
+  }
+
+  //TODO: Repair class definition
+  public String getName() {
+    return name;
+  }
 }

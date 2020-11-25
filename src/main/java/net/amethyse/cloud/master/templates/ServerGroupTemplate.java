@@ -23,4 +23,8 @@ public class ServerGroupTemplate {
   private boolean staticServer;
   private String wrapperName;
 
+  //TODO: Repair class definition
+  public String getName() {
+    return name;
+  }
 }

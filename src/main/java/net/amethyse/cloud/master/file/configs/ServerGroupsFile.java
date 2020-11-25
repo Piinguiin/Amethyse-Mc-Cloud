@@ -19,10 +19,18 @@ import net.amethyse.cloud.master.templates.ServerGroupTemplate;
 @AllArgsConstructor
 public class ServerGroupsFile {
 
-    private List<ServerGroupTemplate> serverTemplates;
+    private final List<ServerGroupTemplate> serverTemplates;
 
+    //TODO: Repair class definition
     public static ServerGroupsFile getDefault(){
-      return new ServerGroupsFile(new ArrayList<>());
+        return new ServerGroupsFile();
     }
 
+    //TODO: Repair class definition
+    public ServerGroupsFile() { serverTemplates = new ArrayList<>(); }
+
+    //TODO: Repair class definition
+    public List<ServerGroupTemplate> getServerTemplates() {
+        return serverTemplates;
+    }
 }

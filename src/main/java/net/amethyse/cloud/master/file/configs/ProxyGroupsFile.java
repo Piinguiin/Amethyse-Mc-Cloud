@@ -19,10 +19,18 @@ import net.amethyse.cloud.master.templates.ProxyGroupTemplate;
 @AllArgsConstructor
 public class ProxyGroupsFile {
 
-  private List<ProxyGroupTemplate> proxyTemplates;
+  private final List<ProxyGroupTemplate> proxyTemplates;
 
+  //TODO: Repair class definition
   public static ProxyGroupsFile getDefault(){
-    return new ProxyGroupsFile(new ArrayList<>());
+    return new ProxyGroupsFile();
   }
 
+  //TODO: Repair class definition
+  public ProxyGroupsFile() { proxyTemplates = new ArrayList<>(); }
+
+  //TODO: Repair class definition
+  public List<ProxyGroupTemplate> getProxyTemplates() {
+    return proxyTemplates;
+  }
 }

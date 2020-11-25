@@ -48,11 +48,11 @@ public class CloudWrapper implements CloudModule {
     protocol.registerListener(new WrapperPacketHandler());
 
     NetFrameConfig config =
-        NetFrameConfig.newBuilder()
-            .setProtocol(protocol)
-            .setServerHost("localhost")
-            .setServerPort(8080)
-            .createNetFrameConfig();
+            NetFrameConfig.newBuilder()
+                    .setProtocol(protocol)
+                    .setServerHost("localhost")
+                    .setServerPort(8080)
+                    .createNetFrameConfig();
     this.client = NetFrameClientFactory.createNetFrameClient(config);
     client.connect();
     client.sendPacket(new HandshakePacket(InstanceType.WRAPPER.getId()));
@@ -64,5 +64,15 @@ public class CloudWrapper implements CloudModule {
   @Override
   public ModuleType getModuleType() {
     return ModuleType.WRAPPER;
+  }
+
+  public static void main(String[] args) {
+    CloudWrapper cloudWrapper = new CloudWrapper();
+    try {
+      cloudWrapper.load(null);
+    }
+    catch (Exception exception) {
+      exception.printStackTrace();
+    }
   }
 }
